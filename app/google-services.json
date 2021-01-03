@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "392477905883",
+    "project_id": "messegerapp-d957e",
+    "storage_bucket": "messegerapp-d957e.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:392477905883:android:f72ec4a10acb4226f5cdfe",
+        "android_client_info": {
+          "package_name": "ipcasergio.am2.messengerapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "392477905883-3c82aqs7a0e3k9ccsogb79to7dvbbtu8.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDsAeoo-9IvPfI8qNZzH1Jhyb3UqzYs02M"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "392477905883-3c82aqs7a0e3k9ccsogb79to7dvbbtu8.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
