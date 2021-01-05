@@ -53,13 +53,13 @@ class ChatActivity : AppCompatActivity() {
 
 
         val reference = FirebaseDatabase.getInstance().reference
-            .child("").child(userIDVisit)
+            .child("Users").child(userIDVisit)
         reference.addValueEventListener(object : ValueEventListener{
             override fun onDataChange(p0: DataSnapshot) {
 
                 val user : Users? = p0.getValue(Users::class.java)
                     username_chat.text = user!!.getUserName()
-                    Picasso.get().load(user.getProfile()).placeholder(R.drawable.profile_img).into(profile_image)
+                    Picasso.get().load(user.getProfile()).placeholder(R.drawable.profile_img).into(profile_image_chat)
                     retrieveMessages(firebaseUser!!.uid, userIDVisit, user.getProfile())
             }
 
