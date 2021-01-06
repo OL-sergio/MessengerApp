@@ -18,7 +18,7 @@ import ipcasergio.am2.messengerapp.R
 class ChatAdapter (mContext: Context, mChatList: List<Chat>, imageUrl: String):
     RecyclerView.Adapter<ChatAdapter.ViewHolder?>() {
 
-    val firebaseUser : FirebaseUser = FirebaseAuth.getInstance().currentUser!!
+
 
         inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView){
             var profile_image: CircleImageView? = null
@@ -36,10 +36,10 @@ class ChatAdapter (mContext: Context, mChatList: List<Chat>, imageUrl: String):
             }
         }
 
-
     private val mContext : Context?
     private val mChatList : List<Chat>
     private val imageUrl : String
+    val firebaseUser : FirebaseUser = FirebaseAuth.getInstance().currentUser!!
 
 
     init {
@@ -60,8 +60,6 @@ class ChatAdapter (mContext: Context, mChatList: List<Chat>, imageUrl: String):
             0
         }
     }
-
-
 
     override fun onCreateViewHolder(parent: ViewGroup, position: Int): ViewHolder {
         return if (position == 1){
@@ -89,7 +87,7 @@ class ChatAdapter (mContext: Context, mChatList: List<Chat>, imageUrl: String):
                 holder.show_text_message!!.visibility = View.GONE
                 holder.right_image_view!!.visibility = View.VISIBLE
                 Picasso.get().load(chat.getUrl()).into(holder.right_image_view)
-
+            // image message - leftside
             }else if (!chat.getSender().equals(firebaseUser!!.uid)) {
                 holder.show_text_message!!.visibility = View.GONE
                 holder.left_image_view!!.visibility = View.VISIBLE
@@ -136,6 +134,9 @@ class ChatAdapter (mContext: Context, mChatList: List<Chat>, imageUrl: String):
     override fun getItemCount(): Int {
      return mChatList.size
     }
+
+
+
 
 
 }

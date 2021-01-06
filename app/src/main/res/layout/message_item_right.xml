@@ -21,7 +21,6 @@
          android:src="@drawable/profile_img"
          android:visibility="gone"
          >
-
      </de.hdodenhof.circleimageview.CircleImageView>
 
      <TextView
@@ -30,7 +29,7 @@
          android:layout_height="wrap_content"
          android:layout_alignParentEnd="true"
          android:layout_alignParentRight="true"
-         android:text="testing msg"
+         android:text="@string/testing_msg"
          android:textSize="18sp"
          android:padding="8dp"
          android:background="@drawable/background_right"
@@ -55,7 +54,7 @@
          android:layout_height="wrap_content"
          android:layout_alignParentEnd="true"
          android:layout_alignParentRight="true"
-         android:text="seen"
+         android:text="@string/seen"
          android:layout_below="@+id/show_text_message"
          >
      </TextView>

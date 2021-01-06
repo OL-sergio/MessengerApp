@@ -44,10 +44,10 @@ class LoginActivity : AppCompatActivity() {
         val password : String = editText_password_login.text.toString()
 
         if (email == ""){
-                Toast.makeText(this@LoginActivity, "Please write email.", Toast.LENGTH_LONG).show()
+                Toast.makeText(this@LoginActivity, "Please write email.", Toast.LENGTH_SHORT).show()
             }
             else if (password == ""){
-                Toast.makeText(this@LoginActivity, "Please write password.", Toast.LENGTH_LONG).show()
+                Toast.makeText(this@LoginActivity, "Please write password.", Toast.LENGTH_SHORT).show()
             }else{
                 mAuth.signInWithEmailAndPassword(email, password)
                     .addOnCompleteListener { task ->
@@ -58,7 +58,7 @@ class LoginActivity : AppCompatActivity() {
                             finish()
 
                         } else {
-                            Toast.makeText(this@LoginActivity, "Error Message:" + task.exception!!.message.toString(), Toast.LENGTH_LONG).show()
+                            Toast.makeText(this@LoginActivity, "Error Message:" + task.exception!!.message.toString(), Toast.LENGTH_SHORT).show()
                         }
                     }
 

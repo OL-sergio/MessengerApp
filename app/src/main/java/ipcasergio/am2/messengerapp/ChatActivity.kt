@@ -1,3 +1,5 @@
+@file:Suppress("DEPRECATION")
+
 package ipcasergio.am2.messengerapp
 
 import android.app.ProgressDialog
@@ -26,6 +28,7 @@ import ipcasergio.am2.messengerapp.ModelClasses.Users
 import kotlinx.android.synthetic.main.activity_chat.*
 import kotlinx.android.synthetic.main.activity_main.*
 
+@Suppress("DEPRECATION")
 class ChatActivity : AppCompatActivity() {
 
 
@@ -45,7 +48,7 @@ class ChatActivity : AppCompatActivity() {
         userIDVisit = intent.getStringExtra("visit_id").toString()
         firebaseUser = FirebaseAuth.getInstance().currentUser
 
-        recyclerView_chat = findViewById(R.id.recyclerView_chat)
+        recyclerView_chat = findViewById(R.id.recyclerView_chat_view)
         recyclerView_chat.setHasFixedSize(true)
         var linearLayoutManager = LinearLayoutManager(applicationContext)
         linearLayoutManager.stackFromEnd = true
@@ -53,18 +56,21 @@ class ChatActivity : AppCompatActivity() {
 
 
         val reference = FirebaseDatabase.getInstance().reference
-            .child("").child(userIDVisit)
+            .child("Users").child(userIDVisit)
         reference.addValueEventListener(object : ValueEventListener{
+
+            override fun onCancelled(p0: DatabaseError) {
+
+            }
+
+
             override fun onDataChange(p0: DataSnapshot) {
 
                 val user : Users? = p0.getValue(Users::class.java)
                     username_chat.text = user!!.getUserName()
-                    Picasso.get().load(user.getProfile()).placeholder(R.drawable.profile_img).into(profile_image)
+                    Picasso.get().load(user.getProfile()).placeholder(R.drawable.profile_img).into(profile_image_chat)
+
                     retrieveMessages(firebaseUser!!.uid, userIDVisit, user.getProfile())
-            }
-
-            override fun onCancelled(p0: DatabaseError) {
-
             }
 
 
@@ -90,6 +96,7 @@ class ChatActivity : AppCompatActivity() {
             intent.type = "image/*"
             startActivityForResult(Intent.createChooser(intent,"Pick Image"),  438)
         }
+
 
     }
 
@@ -121,6 +128,9 @@ class ChatActivity : AppCompatActivity() {
                         .child(userIDVisit)
 
                     chatsListReference.addListenerForSingleValueEvent(object : ValueEventListener {
+                        override fun onCancelled(p0: DatabaseError) {
+
+                        }
                         override fun onDataChange(p0: DataSnapshot) {
 
                             if (!p0.exists()){
@@ -128,17 +138,13 @@ class ChatActivity : AppCompatActivity() {
                             }
 
                             val chatsListReceiverRef = FirebaseDatabase.getInstance()
-                                .reference
-                                .child("ChatLists")
+                                .reference.child("ChatLists")
                                 .child(userIDVisit)
                                 .child(firebaseUser!!.uid)
                             chatsListReceiverRef.child("id").setValue(firebaseUser!!.uid)
 
                         }
 
-                        override fun onCancelled(p0: DatabaseError) {
-
-                        }
                     })
 
                     // implement the notifications using fcm
@@ -201,9 +207,13 @@ class ChatActivity : AppCompatActivity() {
     }
     private fun retrieveMessages(senderId: String, receiverId: String?, receiverImageUrl: String?) {
         mChatList = ArrayList()
-        val reference = FirebaseDatabase.getInstance().reference.child("chats")
+        val reference = FirebaseDatabase.getInstance().reference.child("Chats")
 
         reference.addValueEventListener(object : ValueEventListener {
+            override fun onCancelled(p0: DatabaseError) {
+
+            }
+
             override fun onDataChange(p0: DataSnapshot) {
                 (mChatList as ArrayList<Chat>).clear()
                 for (snapshot in p0.children ){
@@ -218,9 +228,6 @@ class ChatActivity : AppCompatActivity() {
                 }
             }
 
-            override fun onCancelled(p0: DatabaseError) {
-
-            }
 
         })
     }

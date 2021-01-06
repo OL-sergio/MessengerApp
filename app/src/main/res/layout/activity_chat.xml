@@ -50,12 +50,14 @@
     </com.google.android.material.appbar.AppBarLayout>
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerView_chat"
+        android:id="@+id/recyclerView_chat_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_above="@id/relative_layout_bottom"
         android:layout_below="@+id/barLayout_Chat"
+        android:layout_marginTop="6dp"
+        android:layout_marginBottom="-2dp">
 
-        >
     </androidx.recyclerview.widget.RecyclerView>
 
     <RelativeLayout
@@ -82,7 +84,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@android:color/transparent"
-            android:hint="write message here..."
+            android:hint="@string/write_message_here"
             android:layout_toRightOf="@+id/button_send_image_file"
             android:layout_toLeftOf="@+id/button_send_message_chat"
             android:layout_centerVertical="true"

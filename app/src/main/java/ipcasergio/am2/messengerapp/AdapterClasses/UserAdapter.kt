@@ -18,6 +18,24 @@ import ipcasergio.am2.messengerapp.R
 class UserAdapter (mContext: Context, mUsers: List<Users>, isChatCheck : Boolean) :
     RecyclerView.Adapter<UserAdapter.ViewHolder?>() {
 
+    class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        var userNametTxt : TextView
+        var profileImageView : CircleImageView
+        var onlineImageView: CircleImageView
+        var ofllineImageView : CircleImageView
+        var lastMessegeTxt : TextView
+
+        init {
+            userNametTxt = itemView.findViewById(R.id.username)
+            profileImageView = itemView.findViewById(R.id.profile_image)
+            onlineImageView = itemView.findViewById(R.id.image_online)
+            ofllineImageView = itemView.findViewById(R.id.image_offline)
+            lastMessegeTxt = itemView.findViewById(R.id.message_last)
+
+
+        }
+    }
+
     private  val mContext : Context
     private  val mUsers : List<Users>
     private  val isChatCheck : Boolean
@@ -74,23 +92,7 @@ class UserAdapter (mContext: Context, mUsers: List<Users>, isChatCheck : Boolean
         return mUsers.size
     }
 
-    class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        var userNametTxt : TextView
-        var profileImageView : CircleImageView
-        var onlineImageView: CircleImageView
-        var ofllineImageView : CircleImageView
-        var lastMessegeTxt : TextView
 
-        init {
-            userNametTxt = itemView.findViewById(R.id.username)
-            profileImageView = itemView.findViewById(R.id.profile_image)
-            onlineImageView = itemView.findViewById(R.id.image_online)
-            ofllineImageView = itemView.findViewById(R.id.image_offline)
-            lastMessegeTxt = itemView.findViewById(R.id.message_last)
-
-
-        }
-    }
 
 
 }
