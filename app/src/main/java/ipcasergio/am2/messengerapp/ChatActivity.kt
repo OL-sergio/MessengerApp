@@ -50,7 +50,7 @@ class ChatActivity : AppCompatActivity() {
 
         recyclerView_chat = findViewById(R.id.recyclerView_chat_view)
         recyclerView_chat.setHasFixedSize(true)
-        var linearLayoutManager = LinearLayoutManager(applicationContext)
+        val linearLayoutManager = LinearLayoutManager(applicationContext)
         linearLayoutManager.stackFromEnd = true
         recyclerView_chat.layoutManager = linearLayoutManager
 
@@ -160,7 +160,7 @@ class ChatActivity : AppCompatActivity() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
-        if (requestCode == 438 && resultCode == RESULT_OK && data!=null && data!!.data!=null){
+        if (requestCode == 438 && resultCode == RESULT_OK && data!=null && data.data!=null){
             val progressBar = ProgressDialog(this)
             progressBar.setMessage("image is uploading , please wait...")
             progressBar.show()
@@ -171,7 +171,7 @@ class ChatActivity : AppCompatActivity() {
             val messageID = ref.push().key
             val filePath = storageReference.child("$messageID.jpg")
 
-            var uploadTask: StorageTask<*>
+            val uploadTask: StorageTask<*>
             uploadTask = filePath.putFile(fileUri!!)
 
             uploadTask.continueWithTask(Continuation <UploadTask.TaskSnapshot, Task<Uri>>{ task ->

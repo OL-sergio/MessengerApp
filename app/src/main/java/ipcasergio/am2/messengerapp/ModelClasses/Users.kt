@@ -38,7 +38,7 @@ class Users {
         this.website = website
     }
 
-    fun getUID(): String?{
+    fun getUID(): String {
         return uid
     }
 
@@ -46,7 +46,7 @@ class Users {
         this.uid = uid
     }
 
-    fun getUserName(): String?{
+    fun getUserName(): String {
         return username
     }
 
@@ -54,7 +54,7 @@ class Users {
         this.username = username
     }
 
-    fun getProfile(): String?{
+    fun getProfile(): String {
         return profile
     }
 
@@ -62,7 +62,7 @@ class Users {
         this.profile = profile
     }
 
-    fun getCover(): String?{
+    fun getCover(): String {
         return cover
     }
 
@@ -70,7 +70,7 @@ class Users {
         this.cover = cover
     }
 
-    fun getSearch(): String?{
+    fun getSearch(): String {
         return search
     }
 
@@ -78,7 +78,7 @@ class Users {
         this.search = search
     }
 
-    fun getStatus(): String?{
+    fun getStatus(): String {
         return status
     }
 
@@ -86,7 +86,7 @@ class Users {
         this.status = status
     }
 
-    fun getFacebook(): String?{
+    fun getFacebook(): String {
         return facebook
     }
 
@@ -94,7 +94,7 @@ class Users {
         this.facebook = facebook
     }
 
-    fun getInstagram(): String?{
+    fun getInstagram(): String {
         return instagram
     }
 
@@ -102,7 +102,7 @@ class Users {
         this.instagram = instagram
     }
 
-    fun getWebsite(): String?{
+    fun getWebsite(): String {
         return website
     }
 

@@ -45,7 +45,7 @@ class ChatFragment : Fragment() {
 
         val ref = FirebaseDatabase.getInstance().reference.child("ChatLists")
             .child(firebaseUser!!.uid)
-        ref!!.addValueEventListener(object : ValueEventListener{
+        ref.addValueEventListener(object : ValueEventListener{
             override fun onCancelled(p0: DatabaseError) {
 
             }
@@ -72,7 +72,7 @@ class ChatFragment : Fragment() {
         mUsers = ArrayList()
 
         val ref = FirebaseDatabase.getInstance().reference.child("Users")
-        ref!!.addValueEventListener(object : ValueEventListener{
+        ref.addValueEventListener(object : ValueEventListener{
             override fun onCancelled(p0: DatabaseError) {
 
 
@@ -90,7 +90,7 @@ class ChatFragment : Fragment() {
 
                             if (user!!.getUID().equals(eachChatList.getId())){
 
-                                (mUsers as ArrayList).add(user!!)
+                                (mUsers as ArrayList).add(user)
 
                              }
                         }

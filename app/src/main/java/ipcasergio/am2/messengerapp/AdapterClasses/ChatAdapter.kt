@@ -1,5 +1,6 @@
 package ipcasergio.am2.messengerapp.AdapterClasses
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
@@ -50,7 +51,7 @@ class ChatAdapter (mContext: Context, mChatList: List<Chat>, imageUrl: String):
 
     override fun getItemViewType(position: Int): Int {
 
-        return if (mChatList[position].getSender().equals(firebaseUser!!.uid))
+        return if (mChatList[position].getSender().equals(firebaseUser.uid))
         {
             1
 
@@ -64,16 +65,21 @@ class ChatAdapter (mContext: Context, mChatList: List<Chat>, imageUrl: String):
     override fun onCreateViewHolder(parent: ViewGroup, position: Int): ViewHolder {
         return if (position == 1){
             val view: View = LayoutInflater.from(mContext)
-                .inflate(ipcasergio.am2.messengerapp.R.layout.message_item_right, parent, false)
+                .inflate(R.layout.message_item_right, parent, false)
                ViewHolder(view)
         }
         else{
             val view: View = LayoutInflater.from(mContext)
-                .inflate(ipcasergio.am2.messengerapp.R.layout.message_item_left, parent, false)
+                .inflate(R.layout.message_item_left, parent, false)
             ViewHolder(view)
         }
     }
+    override fun getItemCount(): Int {
+        return mChatList.size
+    }
 
+
+    @SuppressLint("SetTextI18n")
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
 
         val chat : Chat = mChatList [position]
@@ -83,12 +89,12 @@ class ChatAdapter (mContext: Context, mChatList: List<Chat>, imageUrl: String):
         if (chat.getMessage().equals("Sent you an image.") && chat.getUrl().equals("")){
 
             // image message - right side
-            if (chat.getSender().equals(firebaseUser!!.uid)){
+            if (chat.getSender().equals(firebaseUser.uid)){
                 holder.show_text_message!!.visibility = View.GONE
                 holder.right_image_view!!.visibility = View.VISIBLE
                 Picasso.get().load(chat.getUrl()).into(holder.right_image_view)
-            // image message - leftside
-            }else if (!chat.getSender().equals(firebaseUser!!.uid)) {
+            // image message - left side
+            }else if (!chat.getSender().equals(firebaseUser.uid)) {
                 holder.show_text_message!!.visibility = View.GONE
                 holder.left_image_view!!.visibility = View.VISIBLE
                 Picasso.get().load(chat.getUrl()).into(holder.left_image_view)
@@ -100,7 +106,7 @@ class ChatAdapter (mContext: Context, mChatList: List<Chat>, imageUrl: String):
         }
 
         //sent and seen message
-        if (position == mChatList.size-1){
+        if (position == mChatList.size - 1){
            if (chat.getIsseen()){
 
                holder.text_seen!!.text ="Seen"
@@ -131,9 +137,6 @@ class ChatAdapter (mContext: Context, mChatList: List<Chat>, imageUrl: String):
 
     }
 
-    override fun getItemCount(): Int {
-     return mChatList.size
-    }
 
 
 

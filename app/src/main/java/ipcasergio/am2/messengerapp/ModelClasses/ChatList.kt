@@ -11,7 +11,7 @@ class ChatList {
         this.id = id
     }
 
-    fun getId(): String?{
+    fun getId(): String {
         return  id
     }
     fun setId(id: String?){

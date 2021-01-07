@@ -31,7 +31,7 @@ class SearchFragment : Fragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
    val view : View = inflater.inflate(R.layout.fragment_search, container, false)
 
         recyclerView = view.findViewById(R.id.search_list)
@@ -61,7 +61,7 @@ class SearchFragment : Fragment() {
         return view
 }
     private  fun retrieveAllUsers(){
-        var firebaseUserID = FirebaseAuth.getInstance().currentUser!!.uid
+        val firebaseUserID = FirebaseAuth.getInstance().currentUser!!.uid
         val refUsers = FirebaseDatabase.getInstance().reference.child("Users")
 
 
@@ -93,7 +93,7 @@ class SearchFragment : Fragment() {
     }
     private fun searchForUsers(str: String){
 
-        var firebaseUserID = FirebaseAuth.getInstance().currentUser!!.uid
+        val firebaseUserID = FirebaseAuth.getInstance().currentUser!!.uid
 
         val queryUsers = FirebaseDatabase.getInstance().reference
             .child("Users").orderByChild("search")

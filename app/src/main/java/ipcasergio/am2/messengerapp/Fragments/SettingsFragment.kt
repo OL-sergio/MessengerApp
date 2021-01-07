@@ -46,7 +46,7 @@ class SettingsFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-       var view = inflater.inflate(R.layout.fragment_settings, container, false)
+       val view = inflater.inflate(R.layout.fragment_settings, container, false)
 
         firebaseUser= FirebaseAuth.getInstance().currentUser
         usersReference = FirebaseDatabase.getInstance().reference.child("Users").child(firebaseUser!!.uid)
@@ -62,7 +62,7 @@ class SettingsFragment : Fragment() {
             override fun onDataChange(p0: DataSnapshot) {
                 if (p0.exists()) {
 
-                    var user  : Users? = p0.getValue(Users::class.java)
+                    val user  : Users? = p0.getValue(Users::class.java)
 
                     if (context!= null) {
                         view.user_name_profile_settings.text = user!!.getUserName()
@@ -199,7 +199,7 @@ class SettingsFragment : Fragment() {
         if (imageUri!=null){
           val fileRef = storageRef!!.child(System.currentTimeMillis().toString() + ".jpg")
 
-            var uploadTask: StorageTask<*>
+            val uploadTask: StorageTask<*>
             uploadTask = fileRef.putFile(imageUri!!)
 
             uploadTask.continueWithTask(Continuation <UploadTask.TaskSnapshot, Task<Uri>>{ task ->
