@@ -22,6 +22,7 @@ import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import com.google.firebase.storage.StorageTask
 import com.google.firebase.storage.UploadTask
+import com.squareup.picasso.Picasso
 import ipcasergio.am2.messengerapp.ModelClasses.Users
 import ipcasergio.am2.messengerapp.R
 import kotlinx.android.synthetic.main.activity_main.*
@@ -42,40 +43,39 @@ class SettingsFragment : Fragment() {
 
 
     override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
+        inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
        var view = inflater.inflate(R.layout.fragment_settings, container, false)
 
         firebaseUser= FirebaseAuth.getInstance().currentUser
-        usersReference = FirebaseDatabase.getInstance().reference.child("User").child(firebaseUser!!.uid)
+        usersReference = FirebaseDatabase.getInstance().reference.child("Users").child(firebaseUser!!.uid)
         storageRef = FirebaseStorage.getInstance().reference.child("User Images")
 
 
         usersReference!!.addValueEventListener(object : ValueEventListener {
+
+            override fun onCancelled(p0: DatabaseError) {
+
+            }
+
             override fun onDataChange(p0: DataSnapshot) {
                 if (p0.exists()) {
 
                     var user  : Users? = p0.getValue(Users::class.java)
 
-
                     if (context!= null) {
                         view.user_name_profile_settings.text = user!!.getUserName()
-
-
                         // tem um erro no picasso
-                       // Picasso.get().load(user.getProfile()).into(view.profile_image_settings)
-                        //Picasso.get().load(user.getCover()).into(view.cover_image_settings)
+                        Picasso.get().load(user.getProfile()).into(view.profile_image_settings)
+                        Picasso.get().load(user.getCover()).into(view.cover_image_settings)
 
                     }
 
                 }
             }
 
-            override fun onCancelled(p0: DatabaseError) {
 
-            }
         })
 
         view.profile_image_settings.setOnClickListener {
@@ -90,7 +90,7 @@ class SettingsFragment : Fragment() {
         }
 
         view.set_facebook.setOnClickListener {
-            socialChecker = "Facebook"
+            socialChecker = "facebook"
             setSocialLinks()
 
         }
@@ -134,7 +134,7 @@ class SettingsFragment : Fragment() {
             dialog, witch ->
             val str = editText.text.toString()
             if (str == ""){
-                Toast.makeText(context, "Please write something...", Toast.LENGTH_LONG).show()
+                Toast.makeText(context, "Please write something...", Toast.LENGTH_SHORT).show()
             }
             else{
                 saveSocialLink(str)
@@ -167,7 +167,7 @@ class SettingsFragment : Fragment() {
         usersReference!!.updateChildren(mapSocial).addOnCompleteListener{ task ->
             if (task.isSuccessful)
             {
-                Toast.makeText(context, "updated Successfully", Toast.LENGTH_LONG).show()
+                Toast.makeText(context, "updated Successfully", Toast.LENGTH_SHORT).show()
             }
         }
     }
@@ -187,11 +187,11 @@ class SettingsFragment : Fragment() {
             imageUri = data.data
 
             Toast.makeText(context, "uploading...", Toast.LENGTH_LONG).show()
-            uploadImage()
+            uploadImageToDatabase()
         }
     }
 
-    private fun uploadImage() {
+    private fun uploadImageToDatabase() {
         val progressBar = ProgressDialog(context)
         progressBar.setMessage("image is uploading , please wait...")
         progressBar.show()
@@ -203,8 +203,7 @@ class SettingsFragment : Fragment() {
             uploadTask = fileRef.putFile(imageUri!!)
 
             uploadTask.continueWithTask(Continuation <UploadTask.TaskSnapshot, Task<Uri>>{ task ->
-                if (!task.isSuccessful){
-
+                if (task.isSuccessful){
                     task.exception?.let {
                         throw it
                     }
@@ -221,16 +220,14 @@ class SettingsFragment : Fragment() {
                         usersReference!!.updateChildren(mapCoverImg)
                         coverChecker = ""
                     }else{
-                        val mapProfileIng = HashMap<String, Any>()
-                        usersReference!!.updateChildren(mapProfileIng)
+                        val mapProfileImg = HashMap<String, Any>()
+                        mapProfileImg["profile"] = url
+                        usersReference!!.updateChildren(mapProfileImg)
                         coverChecker = ""
                     }
                     progressBar.dismiss()
                 }
-
             }
-
-
         }
     }
 }

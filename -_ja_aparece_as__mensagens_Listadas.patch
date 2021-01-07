@@ -1,0 +1,488 @@
+Index: app/src/main/java/ipcasergio/am2/messengerapp/MainActivity.kt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/java/ipcasergio/am2/messengerapp/MainActivity.kt	(revision 559ae45e8812863b0aa3ddc1afbd013ecd64d995)
++++ app/src/main/java/ipcasergio/am2/messengerapp/MainActivity.kt	(date 1609964959646)
+@@ -61,7 +61,7 @@
+                    val user: Users? = p0.getValue(Users::class.java)
+ 
+                    user_name.text = user!!.getUserName()
+-                   Picasso.get().load(user.getProfile()).placeholder(R.drawable.ic_profile).into(profile_image)
++                   Picasso.get().load(user.getProfile()).placeholder(R.drawable.profile_img).into(profile_image)
+                 }
+ 
+             }
+Index: app/src/main/java/ipcasergio/am2/messengerapp/Fragments/SettingsFragment.kt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/java/ipcasergio/am2/messengerapp/Fragments/SettingsFragment.kt	(revision 559ae45e8812863b0aa3ddc1afbd013ecd64d995)
++++ app/src/main/java/ipcasergio/am2/messengerapp/Fragments/SettingsFragment.kt	(date 1609971233605)
+@@ -22,6 +22,7 @@
+ import com.google.firebase.storage.StorageReference
+ import com.google.firebase.storage.StorageTask
+ import com.google.firebase.storage.UploadTask
++import com.squareup.picasso.Picasso
+ import ipcasergio.am2.messengerapp.ModelClasses.Users
+ import ipcasergio.am2.messengerapp.R
+ import kotlinx.android.synthetic.main.activity_main.*
+@@ -42,40 +43,39 @@
+ 
+ 
+     override fun onCreateView(
+-        inflater: LayoutInflater,
+-        container: ViewGroup?,
++        inflater: LayoutInflater, container: ViewGroup?,
+         savedInstanceState: Bundle?
+     ): View? {
+        var view = inflater.inflate(R.layout.fragment_settings, container, false)
+ 
+         firebaseUser= FirebaseAuth.getInstance().currentUser
+-        usersReference = FirebaseDatabase.getInstance().reference.child("User").child(firebaseUser!!.uid)
++        usersReference = FirebaseDatabase.getInstance().reference.child("Users").child(firebaseUser!!.uid)
+         storageRef = FirebaseStorage.getInstance().reference.child("User Images")
+ 
+ 
+         usersReference!!.addValueEventListener(object : ValueEventListener {
++
++            override fun onCancelled(p0: DatabaseError) {
++
++            }
++
+             override fun onDataChange(p0: DataSnapshot) {
+                 if (p0.exists()) {
+ 
+                     var user  : Users? = p0.getValue(Users::class.java)
+ 
+-
+                     if (context!= null) {
+                         view.user_name_profile_settings.text = user!!.getUserName()
+-
+-
+                         // tem um erro no picasso
+-                       // Picasso.get().load(user.getProfile()).into(view.profile_image_settings)
+-                        //Picasso.get().load(user.getCover()).into(view.cover_image_settings)
++                        Picasso.get().load(user.getProfile()).into(view.profile_image_settings)
++                        Picasso.get().load(user.getCover()).into(view.cover_image_settings)
+ 
+                     }
+ 
+                 }
+             }
+ 
+-            override fun onCancelled(p0: DatabaseError) {
+ 
+-            }
+         })
+ 
+         view.profile_image_settings.setOnClickListener {
+@@ -90,7 +90,7 @@
+         }
+ 
+         view.set_facebook.setOnClickListener {
+-            socialChecker = "Facebook"
++            socialChecker = "facebook"
+             setSocialLinks()
+ 
+         }
+@@ -134,7 +134,7 @@
+             dialog, witch ->
+             val str = editText.text.toString()
+             if (str == ""){
+-                Toast.makeText(context, "Please write something...", Toast.LENGTH_LONG).show()
++                Toast.makeText(context, "Please write something...", Toast.LENGTH_SHORT).show()
+             }
+             else{
+                 saveSocialLink(str)
+@@ -167,7 +167,7 @@
+         usersReference!!.updateChildren(mapSocial).addOnCompleteListener{ task ->
+             if (task.isSuccessful)
+             {
+-                Toast.makeText(context, "updated Successfully", Toast.LENGTH_LONG).show()
++                Toast.makeText(context, "updated Successfully", Toast.LENGTH_SHORT).show()
+             }
+         }
+     }
+@@ -187,11 +187,11 @@
+             imageUri = data.data
+ 
+             Toast.makeText(context, "uploading...", Toast.LENGTH_LONG).show()
+-            uploadImage()
++            uploadImageToDatabase()
+         }
+     }
+ 
+-    private fun uploadImage() {
++    private fun uploadImageToDatabase() {
+         val progressBar = ProgressDialog(context)
+         progressBar.setMessage("image is uploading , please wait...")
+         progressBar.show()
+@@ -203,8 +203,7 @@
+             uploadTask = fileRef.putFile(imageUri!!)
+ 
+             uploadTask.continueWithTask(Continuation <UploadTask.TaskSnapshot, Task<Uri>>{ task ->
+-                if (!task.isSuccessful){
+-
++                if (task.isSuccessful){
+                     task.exception?.let {
+                         throw it
+                     }
+@@ -221,16 +220,14 @@
+                         usersReference!!.updateChildren(mapCoverImg)
+                         coverChecker = ""
+                     }else{
+-                        val mapProfileIng = HashMap<String, Any>()
+-                        usersReference!!.updateChildren(mapProfileIng)
++                        val mapProfileImg = HashMap<String, Any>()
++                        mapProfileImg["profile"] = url
++                        usersReference!!.updateChildren(mapProfileImg)
+                         coverChecker = ""
+                     }
+                     progressBar.dismiss()
+                 }
+-
+             }
+-
+-
+         }
+     }
+ }
+\ No newline at end of file
+Index: app/src/main/java/ipcasergio/am2/messengerapp/LoginActivity.kt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/java/ipcasergio/am2/messengerapp/LoginActivity.kt	(revision 559ae45e8812863b0aa3ddc1afbd013ecd64d995)
++++ app/src/main/java/ipcasergio/am2/messengerapp/LoginActivity.kt	(date 1609966947898)
+@@ -14,7 +14,6 @@
+     lateinit var  mAuth: FirebaseAuth
+ 
+ 
+-
+     override fun onCreate(savedInstanceState: Bundle?) {
+         super.onCreate(savedInstanceState)
+         setContentView(R.layout.activity_login)
+Index: app/src/main/res/layout/fragment_settings.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/res/layout/fragment_settings.xml	(revision 559ae45e8812863b0aa3ddc1afbd013ecd64d995)
++++ app/src/main/res/layout/fragment_settings.xml	(date 1609974262715)
+@@ -22,9 +22,9 @@
+                 android:id="@+id/cover_image_settings"
+                 android:layout_width="match_parent"
+                 android:layout_height="200dp"
+-                android:src="@drawable/medical_background"
+                 android:scaleType="centerCrop"
+-                >
++                android:src="@drawable/medical_background">
++
+             </ImageView>
+ 
+             <de.hdodenhof.circleimageview.CircleImageView
+@@ -35,7 +35,6 @@
+                 android:layout_marginTop="140dp"
+                 android:src="@drawable/profile_img"
+                 >
+-
+             </de.hdodenhof.circleimageview.CircleImageView>
+ 
+             <TextView
+@@ -52,6 +51,7 @@
+                 android:layout_marginBottom="20dp"
+                 >
+             </TextView>
++
+         </RelativeLayout>
+ 
+     </androidx.cardview.widget.CardView>
+Index: app/src/main/java/ipcasergio/am2/messengerapp/Fragments/SearchFragment.kt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/java/ipcasergio/am2/messengerapp/Fragments/SearchFragment.kt	(revision 559ae45e8812863b0aa3ddc1afbd013ecd64d995)
++++ app/src/main/java/ipcasergio/am2/messengerapp/Fragments/SearchFragment.kt	(date 1609968026916)
+@@ -101,12 +101,16 @@
+             .endAt(str + "\uf8ff")
+ 
+         queryUsers.addValueEventListener(object : ValueEventListener{
++            override fun onCancelled(error: DatabaseError) {
++
++            }
++
+             override fun onDataChange(p0: DataSnapshot) {
+                 (mUsers as ArrayList<Users>).clear()
+ 
+                 for (snapshot in p0.children ){
+                     val user = snapshot.getValue(Users::class.java)
+-                    if (!(user!!.getUID()).equals(firebaseUserID)){
++                    if (!(user!!.getUID().equals(firebaseUserID))){
+ 
+                         (mUsers as ArrayList<Users>).add(user)
+                     }
+@@ -115,9 +119,6 @@
+                 recyclerView!!.adapter = userAdapter
+             }
+ 
+-            override fun onCancelled(error: DatabaseError) {
+-
+-            }
+ 
+ 
+         })
+Index: app/src/main/res/layout/message_item_right.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/res/layout/message_item_right.xml	(revision 559ae45e8812863b0aa3ddc1afbd013ecd64d995)
++++ app/src/main/res/layout/message_item_right.xml	(date 1609968918166)
+@@ -54,7 +54,6 @@
+          android:layout_height="wrap_content"
+          android:layout_alignParentEnd="true"
+          android:layout_alignParentRight="true"
+-         android:text="@string/seen"
+          android:layout_below="@+id/show_text_message"
+          >
+      </TextView>
+Index: app/src/main/java/ipcasergio/am2/messengerapp/RegisterActivity.kt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/java/ipcasergio/am2/messengerapp/RegisterActivity.kt	(revision 559ae45e8812863b0aa3ddc1afbd013ecd64d995)
++++ app/src/main/java/ipcasergio/am2/messengerapp/RegisterActivity.kt	(date 1609967053516)
+@@ -25,9 +25,11 @@
+ 
+ 
+         val toolbar : Toolbar = findViewById(R.id.toolbar_register)
++
+         setSupportActionBar(toolbar)
+         supportActionBar!!.title = "Register"
+         supportActionBar!!.setDisplayHomeAsUpEnabled(true)
++
+         toolbar.setNavigationOnClickListener{
+             val intent = Intent(this@RegisterActivity, WelcomeActivity::class.java)
+             startActivity(intent)
+@@ -49,13 +51,13 @@
+         val password : String = editText_password_register.text.toString()
+ 
+         if (username == ""){
+-            Toast.makeText(this@RegisterActivity, "Please write username.", Toast.LENGTH_LONG).show()
++            Toast.makeText(this@RegisterActivity, "Please write username.", Toast.LENGTH_SHORT).show()
+         }
+         else if (email == ""){
+-            Toast.makeText(this@RegisterActivity, "Please write email.", Toast.LENGTH_LONG).show()
++            Toast.makeText(this@RegisterActivity, "Please write email.", Toast.LENGTH_SHORT).show()
+         }
+         else if (password == ""){
+-            Toast.makeText(this@RegisterActivity, "Please write password.", Toast.LENGTH_LONG).show()
++            Toast.makeText(this@RegisterActivity, "Please write password.", Toast.LENGTH_SHORT).show()
+         }
+         else{
+             mAuth.createUserWithEmailAndPassword(email, password)
+@@ -89,7 +91,7 @@
+                             }
+ 
+                     }else{
+-                        Toast.makeText(this@RegisterActivity, "Error Message:" + task.exception!!.message.toString(), Toast.LENGTH_LONG).show()
++                        Toast.makeText(this@RegisterActivity, "Error Message:" + task.exception!!.message.toString(), Toast.LENGTH_SHORT).show()
+                     }
+                 }
+         }
+Index: app/src/main/java/ipcasergio/am2/messengerapp/AdapterClasses/UserAdapter.kt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/java/ipcasergio/am2/messengerapp/AdapterClasses/UserAdapter.kt	(revision 559ae45e8812863b0aa3ddc1afbd013ecd64d995)
++++ app/src/main/java/ipcasergio/am2/messengerapp/AdapterClasses/UserAdapter.kt	(date 1609969862338)
+@@ -18,19 +18,23 @@
+ class UserAdapter (mContext: Context, mUsers: List<Users>, isChatCheck : Boolean) :
+     RecyclerView.Adapter<UserAdapter.ViewHolder?>() {
+ 
++    override fun getItemCount(): Int {
++        return mUsers.size
++    }
++
+     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+         var userNametTxt : TextView
+         var profileImageView : CircleImageView
+         var onlineImageView: CircleImageView
+-        var ofllineImageView : CircleImageView
+-        var lastMessegeTxt : TextView
++        var offlineImageView : CircleImageView
++        var lastMessageTxt : TextView
+ 
+         init {
+             userNametTxt = itemView.findViewById(R.id.username)
+             profileImageView = itemView.findViewById(R.id.profile_image)
+             onlineImageView = itemView.findViewById(R.id.image_online)
+-            ofllineImageView = itemView.findViewById(R.id.image_offline)
+-            lastMessegeTxt = itemView.findViewById(R.id.message_last)
++            offlineImageView = itemView.findViewById(R.id.image_offline)
++            lastMessageTxt = itemView.findViewById(R.id.message_last)
+ 
+ 
+         }
+@@ -47,6 +51,7 @@
+     }
+ 
+     override fun onCreateViewHolder( viewGroup: ViewGroup, viewType: Int): ViewHolder {
++
+         val view: View = LayoutInflater.from(mContext)
+             .inflate(R.layout.user_search_item_layout, viewGroup, false)
+         return UserAdapter.ViewHolder(view)
+@@ -54,7 +59,6 @@
+ 
+     override fun onBindViewHolder(holder: ViewHolder, i: Int) {
+ 
+-
+         val user: Users = mUsers[i]
+         holder.userNametTxt.text = user.getUserName()
+         Picasso.get().load(user.getProfile()).placeholder(R.drawable.ic_profile).into(holder.profileImageView)
+@@ -62,11 +66,11 @@
+         //chat
+         holder.itemView.setOnClickListener {
+             val options = arrayOf<CharSequence>(
+-                "send Message",
++                "Send Message",
+                 "Visit Profile"
+             )
+-            val builder : AlertDialog.Builder = AlertDialog.Builder(mContext)
+-            builder.setTitle("what do you want?")
++            val builder = AlertDialog.Builder(mContext)
++            builder.setTitle("What do you want?")
+             builder.setItems(options, DialogInterface.OnClickListener { dialog, position ->
+                 if (position == 0 ){
+ 
+@@ -79,6 +83,8 @@
+                 }
+                 if (position == 1 ){
+ 
++
++
+                 }
+ 
+ 
+@@ -88,9 +94,7 @@
+ 
+     }
+ 
+-    override fun getItemCount(): Int {
+-        return mUsers.size
+-    }
++
+ 
+ 
+ 
+Index: app/src/main/java/ipcasergio/am2/messengerapp/ChatActivity.kt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/java/ipcasergio/am2/messengerapp/ChatActivity.kt	(revision 559ae45e8812863b0aa3ddc1afbd013ecd64d995)
++++ app/src/main/java/ipcasergio/am2/messengerapp/ChatActivity.kt	(date 1609974262709)
+@@ -36,29 +36,39 @@
+     var firebaseUser : FirebaseUser? = null
+     var chatAdapter : ChatAdapter? = null
+     var mChatList : List<Chat>? = null
+-    lateinit var recyclerView_chat: RecyclerView
++    lateinit var recyclerView_chat_view: RecyclerView
+ 
+     override fun onCreate(savedInstanceState: Bundle?) {
+         super.onCreate(savedInstanceState)
+         setContentView(R.layout.activity_chat)
+ 
++        val toolbar : androidx.appcompat.widget.Toolbar = findViewById(R.id.toolbar_chat)
++        setSupportActionBar(toolbar)
++        supportActionBar!!.title = "Login"
++        supportActionBar!!.setDisplayHomeAsUpEnabled(true)
++        toolbar.setNavigationOnClickListener{
++            val intent = Intent(this@ChatActivity, WelcomeActivity::class.java)
++            startActivity(intent)
++            finish()
++        }
+ 
+         intent = intent
+         //mudei aqui adicionei tostring
+         userIDVisit = intent.getStringExtra("visit_id").toString()
+         firebaseUser = FirebaseAuth.getInstance().currentUser
+ 
+-        recyclerView_chat = findViewById(R.id.recyclerView_chat_view)
+-        recyclerView_chat.setHasFixedSize(true)
++        recyclerView_chat_view = findViewById(R.id.recyclerView_chat_view)
++        recyclerView_chat_view.setHasFixedSize(true)
+         var linearLayoutManager = LinearLayoutManager(applicationContext)
+         linearLayoutManager.stackFromEnd = true
+-        recyclerView_chat.layoutManager = linearLayoutManager
++        recyclerView_chat_view.layoutManager = linearLayoutManager
+ 
+ 
+-        val reference = FirebaseDatabase.getInstance().reference
++         val reference = FirebaseDatabase.getInstance().reference
+             .child("Users").child(userIDVisit)
++
++
+         reference.addValueEventListener(object : ValueEventListener{
+-
+             override fun onCancelled(p0: DatabaseError) {
+ 
+             }
+@@ -81,7 +91,7 @@
+             val message = text_messege_chat.text.toString()
+             if (message == ""){
+ 
+-                Toast.makeText(this@ChatActivity, "Please write a message, first", Toast.LENGTH_LONG).show()
++                Toast.makeText(this@ChatActivity, "Please write a message, first", Toast.LENGTH_SHORT).show()
+             }
+             else{
+ 
+@@ -102,7 +112,6 @@
+ 
+ 
+ 
+-
+     // chat send message code
+     private fun sendMessageToUser(senderId: String, receiverId: String?, message: String) {
+ 
+@@ -224,7 +233,7 @@
+                         (mChatList as ArrayList<Chat>).add(chat)
+                     }
+                     chatAdapter = ChatAdapter(this@ChatActivity, (mChatList as ArrayList<Chat>), receiverImageUrl!!)
+-                    recyclerView_chat.adapter = chatAdapter
++                    recyclerView_chat_view.adapter = chatAdapter
+                 }
+             }
+ 
+Index: app/src/main/res/layout/message_item_left.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/res/layout/message_item_left.xml	(revision 559ae45e8812863b0aa3ddc1afbd013ecd64d995)
++++ app/src/main/res/layout/message_item_left.xml	(date 1609968830291)
+@@ -6,7 +6,7 @@
+     android:padding="9dp"
+     >
+     <de.hdodenhof.circleimageview.CircleImageView
+-        android:id="@+id/profile_image"
++        android:id="@+id/profile_image_left"
+         android:layout_width="40dp"
+         android:layout_height="40dp"
+         android:src="@drawable/profile_img"
+@@ -42,7 +42,7 @@
+         android:id="@+id/text_seen"
+         android:layout_width="wrap_content"
+         android:layout_height="wrap_content"
+-        android:text="seen"
++        android:visibility="gone"
+         android:layout_below="@+id/show_text_message"
+         >
+     </TextView>

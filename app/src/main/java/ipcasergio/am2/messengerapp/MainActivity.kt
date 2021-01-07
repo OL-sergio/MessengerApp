@@ -61,7 +61,7 @@ class MainActivity : AppCompatActivity() {
                    val user: Users? = p0.getValue(Users::class.java)
 
                    user_name.text = user!!.getUserName()
-                   Picasso.get().load(user.getProfile()).placeholder(R.drawable.ic_profile).into(profile_image)
+                   Picasso.get().load(user.getProfile()).placeholder(R.drawable.profile_img).into(profile_image)
                 }
 
             }

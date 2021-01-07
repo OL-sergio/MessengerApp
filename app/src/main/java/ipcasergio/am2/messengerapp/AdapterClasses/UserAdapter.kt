@@ -18,19 +18,23 @@ import ipcasergio.am2.messengerapp.R
 class UserAdapter (mContext: Context, mUsers: List<Users>, isChatCheck : Boolean) :
     RecyclerView.Adapter<UserAdapter.ViewHolder?>() {
 
+    override fun getItemCount(): Int {
+        return mUsers.size
+    }
+
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         var userNametTxt : TextView
         var profileImageView : CircleImageView
         var onlineImageView: CircleImageView
-        var ofllineImageView : CircleImageView
-        var lastMessegeTxt : TextView
+        var offlineImageView : CircleImageView
+        var lastMessageTxt : TextView
 
         init {
             userNametTxt = itemView.findViewById(R.id.username)
             profileImageView = itemView.findViewById(R.id.profile_image)
             onlineImageView = itemView.findViewById(R.id.image_online)
-            ofllineImageView = itemView.findViewById(R.id.image_offline)
-            lastMessegeTxt = itemView.findViewById(R.id.message_last)
+            offlineImageView = itemView.findViewById(R.id.image_offline)
+            lastMessageTxt = itemView.findViewById(R.id.message_last)
 
 
         }
@@ -47,13 +51,13 @@ class UserAdapter (mContext: Context, mUsers: List<Users>, isChatCheck : Boolean
     }
 
     override fun onCreateViewHolder( viewGroup: ViewGroup, viewType: Int): ViewHolder {
+
         val view: View = LayoutInflater.from(mContext)
             .inflate(R.layout.user_search_item_layout, viewGroup, false)
         return UserAdapter.ViewHolder(view)
     }
 
     override fun onBindViewHolder(holder: ViewHolder, i: Int) {
-
 
         val user: Users = mUsers[i]
         holder.userNametTxt.text = user.getUserName()
@@ -62,11 +66,11 @@ class UserAdapter (mContext: Context, mUsers: List<Users>, isChatCheck : Boolean
         //chat
         holder.itemView.setOnClickListener {
             val options = arrayOf<CharSequence>(
-                "send Message",
+                "Send Message",
                 "Visit Profile"
             )
-            val builder : AlertDialog.Builder = AlertDialog.Builder(mContext)
-            builder.setTitle("what do you want?")
+            val builder = AlertDialog.Builder(mContext)
+            builder.setTitle("What do you want?")
             builder.setItems(options, DialogInterface.OnClickListener { dialog, position ->
                 if (position == 0 ){
 
@@ -79,6 +83,8 @@ class UserAdapter (mContext: Context, mUsers: List<Users>, isChatCheck : Boolean
                 }
                 if (position == 1 ){
 
+
+
                 }
 
 
@@ -88,9 +94,7 @@ class UserAdapter (mContext: Context, mUsers: List<Users>, isChatCheck : Boolean
 
     }
 
-    override fun getItemCount(): Int {
-        return mUsers.size
-    }
+
 
 
 

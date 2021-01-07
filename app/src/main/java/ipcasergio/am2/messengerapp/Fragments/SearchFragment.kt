@@ -101,12 +101,16 @@ class SearchFragment : Fragment() {
             .endAt(str + "\uf8ff")
 
         queryUsers.addValueEventListener(object : ValueEventListener{
+            override fun onCancelled(error: DatabaseError) {
+
+            }
+
             override fun onDataChange(p0: DataSnapshot) {
                 (mUsers as ArrayList<Users>).clear()
 
                 for (snapshot in p0.children ){
                     val user = snapshot.getValue(Users::class.java)
-                    if (!(user!!.getUID()).equals(firebaseUserID)){
+                    if (!(user!!.getUID().equals(firebaseUserID))){
 
                         (mUsers as ArrayList<Users>).add(user)
                     }
@@ -115,9 +119,6 @@ class SearchFragment : Fragment() {
                 recyclerView!!.adapter = userAdapter
             }
 
-            override fun onCancelled(error: DatabaseError) {
-
-            }
 
 
         })

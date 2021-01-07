@@ -1,5 +1,6 @@
 package ipcasergio.am2.messengerapp
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
@@ -25,9 +26,11 @@ class RegisterActivity : AppCompatActivity() {
 
 
         val toolbar : Toolbar = findViewById(R.id.toolbar_register)
+
         setSupportActionBar(toolbar)
         supportActionBar!!.title = "Register"
         supportActionBar!!.setDisplayHomeAsUpEnabled(true)
+
         toolbar.setNavigationOnClickListener{
             val intent = Intent(this@RegisterActivity, WelcomeActivity::class.java)
             startActivity(intent)
@@ -42,6 +45,7 @@ class RegisterActivity : AppCompatActivity() {
         }
     }
 
+    @SuppressLint("DefaultLocale")
     private fun registerUer() {
 
         val username : String = editText_username_register.text.toString()
@@ -49,13 +53,13 @@ class RegisterActivity : AppCompatActivity() {
         val password : String = editText_password_register.text.toString()
 
         if (username == ""){
-            Toast.makeText(this@RegisterActivity, "Please write username.", Toast.LENGTH_LONG).show()
+            Toast.makeText(this@RegisterActivity, "Please write username.", Toast.LENGTH_SHORT).show()
         }
         else if (email == ""){
-            Toast.makeText(this@RegisterActivity, "Please write email.", Toast.LENGTH_LONG).show()
+            Toast.makeText(this@RegisterActivity, "Please write email.", Toast.LENGTH_SHORT).show()
         }
         else if (password == ""){
-            Toast.makeText(this@RegisterActivity, "Please write password.", Toast.LENGTH_LONG).show()
+            Toast.makeText(this@RegisterActivity, "Please write password.", Toast.LENGTH_SHORT).show()
         }
         else{
             mAuth.createUserWithEmailAndPassword(email, password)
@@ -89,7 +93,7 @@ class RegisterActivity : AppCompatActivity() {
                             }
 
                     }else{
-                        Toast.makeText(this@RegisterActivity, "Error Message:" + task.exception!!.message.toString(), Toast.LENGTH_LONG).show()
+                        Toast.makeText(this@RegisterActivity, "Error Message:" + task.exception!!.message.toString(), Toast.LENGTH_SHORT).show()
                     }
                 }
         }
