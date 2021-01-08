@@ -61,7 +61,7 @@ class UserAdapter (mContext: Context, mUsers: List<Users>, isChatCheck : Boolean
 
         val user: Users = mUsers[i]
         holder.userNametTxt.text = user.getUserName()
-        Picasso.get().load(user.getProfile()).placeholder(R.drawable.ic_profile).into(holder.profileImageView)
+        Picasso.get().load(user.getProfile()).placeholder(R.drawable.profile_img).into(holder.profileImageView)
 
         //chat
         holder.itemView.setOnClickListener {

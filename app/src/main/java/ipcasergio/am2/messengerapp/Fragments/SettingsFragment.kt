@@ -1,3 +1,5 @@
+@file:Suppress("DEPRECATION")
+
 package ipcasergio.am2.messengerapp.Fragments
 
 import android.app.Activity
